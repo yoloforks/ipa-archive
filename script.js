@@ -6,6 +6,18 @@ let PER_PAGE = 30
 let currentPage = 0
 let currentFiltered = []
 
+// DOM Elements
+const searchInput = document.getElementById('searchInput')
+const bundleInput = document.getElementById('bundleid')
+const minosInput = document.getElementById('minos')
+const maxosInput = document.getElementById('maxos')
+const deviceSelect = document.getElementById('device')
+const uniqueCheck = document.getElementById('unique')
+const resultsContainer = document.getElementById('resultsContainer')
+const searchResults = document.getElementById('searchResults')
+const emptyState = document.getElementById('searchEmptyState')
+const modalContainer = document.getElementById('modalContainer')
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -97,17 +109,6 @@ function renderAppTitleWithDevices(app) {
   return `${escapeHtml(app?.title)}${getPlatformIcons(app?.platform)}`
 }
 
-// DOM Elements
-const searchInput = document.getElementById('searchInput')
-const bundleInput = document.getElementById('bundleid')
-const minosInput = document.getElementById('minos')
-const maxosInput = document.getElementById('maxos')
-const deviceSelect = document.getElementById('device')
-const uniqueCheck = document.getElementById('unique')
-const searchResults = document.getElementById('searchResults')
-const emptyState = document.getElementById('searchEmptyState')
-const modalContainer = document.getElementById('modalContainer')
-
 function getFilteredApps() {
   const q = searchInput.value.toLowerCase().trim()
   const bid = bundleInput.value.toLowerCase().trim()
@@ -165,6 +166,14 @@ function applyFilters(page = 0) {
   saveConfig()
 }
 
+function smoothScroll() {
+  resultsContainer.scrollIntoView({
+    top: 0,
+    inline: 'start',
+    behavior: 'smooth'
+  })
+}
+
 function renderPagination(total, page) {
   const nav = document.getElementById('pagination')
   const totalPages = Math.ceil(total / PER_PAGE)
@@ -178,8 +187,6 @@ function renderPagination(total, page) {
   const range = 2
   let start = Math.max(0, page - range)
   let end = Math.min(totalPages - 1, page + range)
-
-  const smoothScroll = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
   if (page > 0) {
     const prev = document.createElement('button')
@@ -196,7 +203,8 @@ function renderPagination(total, page) {
     btn.textContent = i + 1
     if (i === page) btn.className = 'active'
     btn.onclick = () => {
-      applyFilters(i); smoothScroll()
+      applyFilters(i);
+      smoothScroll()
     }
     wrap.appendChild(btn)
   }
@@ -205,7 +213,8 @@ function renderPagination(total, page) {
     const next = document.createElement('button')
     next.innerHTML = '&raquo;'
     next.onclick = () => {
-      applyFilters(page + 1); smoothScroll()
+      applyFilters(page + 1);
+      smoothScroll()
     }
     wrap.appendChild(next)
   }
@@ -252,7 +261,7 @@ function randomIPA() {
         iOS ${formatOS(app.min_os)}+
         ${getPlatformIcons(app.platform)}
     </div>
-    <button class="ios-btn-blue" style="width:100%; border-radius:20px;" onclick="openModal('${app.pk}')">View App</button>
+    <button class="primary-btn" style="width:100%; border-radius:20px;" onclick="openModal('${app.pk}')">View App</button>
  `
   container.appendChild(card)
   searchResults.appendChild(container)
@@ -343,7 +352,8 @@ function renderVersionPage(bundleId, page = 0) {
       first.innerHTML = '&laquo;&laquo;'
       first.title = 'First Page'
       first.onclick = (e) => {
-        e.stopPropagation(); renderVersionPage(bundleId, 0)
+        e.stopPropagation();
+        renderVersionPage(bundleId, 0)
       }
       wrap.appendChild(first)
     }
@@ -414,7 +424,7 @@ function renderVersionPage(bundleId, page = 0) {
   }
 }
 
-// ── Segmented Control Logic ──────────────────────────────────────────
+// Segmented Control Logic
 document.querySelectorAll('.segment').forEach(seg => {
   seg.addEventListener('click', function () {
     const parent = this.parentElement
@@ -425,6 +435,11 @@ document.querySelectorAll('.segment').forEach(seg => {
     hiddenInput.value = this.dataset.value
     applyFilters()
   })
+})
+
+// Unique Login
+uniqueCheck.addEventListener('change', function () {
+  applyFilters()
 })
 
 function setActiveSegment(value) {
@@ -438,7 +453,7 @@ function setActiveSegment(value) {
   })
 }
 
-// ── Modal ────────────────────────────────────────────────────────────
+// Modal
 function createModal(app) {
   const modal = document.createElement('div')
   modal.className = 'modal-overlay'
@@ -455,7 +470,7 @@ function createModal(app) {
                 <div class="modal-app-title">${escapeHtml(app.title)}</div>
                 <div class="modal-app-developer">${escapeHtml(app.bundle_id)}</div>
             </div>
-            <button class="random-btn-header" style="width: 80px; height: 32px;" onclick="toggleVersions(this)">Get</button>
+            <button class="primary-btn" style="width: 80px; height: 32px;" onclick="toggleVersions(this)">Get</button>
         </div>
         <div class="modal-section">
             <h3><i class="fas fa-mobile-alt"></i> Compatibility</h3>
@@ -466,7 +481,7 @@ function createModal(app) {
             <h3><i class="fas fa-screwdriver-wrench"></i> Install on device</h3>
             <p style="font-size:12px; color:#666; margin-bottom:10px;">
                 Unfortunatelly, this function is not possible with static HTML+JS.
-                You must provided a plist generator URL. See <a href="https://github.com/stuffed18/ipa-archive-updated?tab=readme-ov-file#starting-plist-server" target="_blank" style="color:#0a84ff; text-decoration:underline;">Readme</a> file for further
+                You must provided a plist generator URL. See <a href="https://github.com/yoloforks/ipa-archive?tab=readme-ov-file#starting-plist-server" target="_blank" style="color:#0a84ff; text-decoration:underline;">Readme</a> file for further
                 instructions on how to set up such a service.
             </p>
             <button onclick="document.getElementById('plistConfigArea').style.display='flex'" class="get-btn-glossy" style="padding:6px 12px; font-size:12px; margin-bottom:10px;">Configure now</button>
@@ -547,7 +562,7 @@ function toggleVersions(btn) {
   sheet.classList.toggle('active')
 }
 
-// ── Config ───────────────────────────────────────────────────────────
+// Config
 function saveConfig() {
   const data = {
     q: searchInput.value,
@@ -579,6 +594,29 @@ function loadConfig() {
 
 appsPromise.then(() => {
   loadConfig()
+  if (!location.hash.length) applyFilters()
 }).catch(e => {
   console.error(e)
 })
+
+// Theme Toggle
+const currentTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const isDark = currentTheme ? currentTheme === 'dark' : prefersDark;
+if (isDark) document.body.classList.add('dark');
+
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  const icon = document.getElementById('themeIcon');
+  if (icon) {
+    icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const icon = document.getElementById('themeIcon');
+  if (icon && document.body.classList.contains('dark')) {
+    icon.className = 'fas fa-sun';
+  }
+});

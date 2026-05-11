@@ -15,19 +15,22 @@
 </head>
 <body>
     <!-- Glossy Header -->
-    <header>
+    <header id="header">
         <div class="header-content">
-            <div class="logo">
-                <div class="card-icon-glossy" style="width: 44px; height: 44px; border-radius: 10px; margin: 0 12px 0 0;">
+            <div class="header-logo">
+                <a href="/" class="logo-image card-icon-glossy">
                     <img src="apple-touch-icon.png" alt="Logo">
-                </div>
+                </a>
                 <div class="header-text">
                     <h1>IPA Archive</h1>
                     <div id="statsBar" class="stats-bar">Loading database...</div>
                 </div>
             </div>
             <div class="header-actions">
-                <button class="random-btn-header" onclick="randomIPA()"><i class="fas fa-shuffle"></i> Random</button>
+                <button class="primary-btn" onclick="randomIPA()"><i class="fas fa-shuffle"></i> Random</button>
+                <button class="primary-btn icon-only" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
             </div>
         </div>
     </header>
@@ -37,7 +40,7 @@
         <form id="searchForm" class="ios-form" onsubmit="event.preventDefault(); applyFilters();">
             <div class="search-row">
                 <input type="text" id="searchInput" placeholder="Search apps..." class="ios-input main-search">
-                <button type="submit" class="ios-btn-blue">Search</button>
+                <button type="submit" class="primary-btn large">Search</button>
             </div>
             <div class="filter-grid">
                 <div class="filter-item">
@@ -74,7 +77,7 @@
         <div id="searchResultCount" class="result-count-glossy" style="display: none;"></div>
         <div class="search-empty-state" id="searchEmptyState">
             <i class="fas fa-search search-icon"></i>
-            <p class="search-message">Enter criteria to start searching</p>
+            <p class="search-message">No results found</p>
         </div>
         <div id="searchResults" class="app-grid"></div>
         <div id="pagination" class="ios-pagination"></div>
