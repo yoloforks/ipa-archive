@@ -27,7 +27,19 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button class="primary-btn" onclick="randomIPA()"><i class="fas fa-shuffle"></i> Random</button>
+                <div class="random-controls">
+                    <button class="primary-btn random-btn" onclick="randomIPA()">
+                        <i class="fas fa-shuffle"></i> Random
+                    </button>
+                    <label class="primary-btn random-count-select" for="randomCountSelect">
+                        <select id="randomCountSelect">
+                            <option value="1">×1</option>
+                            <option value="5" selected>×5</option>
+                            <option value="10">×10</option>
+                            <option value="30">×30</option>
+                        </select>
+                    </label>
+                </div>
                 <button class="primary-btn icon-only" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
                     <i class="fas fa-moon" id="themeIcon"></i>
                 </button>

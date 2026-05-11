@@ -236,34 +236,44 @@ function randomIPA() {
     alert('No apps match your current filters. Try changing the OS or Device settings.')
     return
   }
-  const idx = Math.floor(Math.random() * filteredPool.length)
-  const app = filteredPool[idx]
+
+  const count = Math.min(
+    parseInt(document.getElementById('randomCountSelect').value),
+    filteredPool.length
+  )
+
+  // Reservoir sampling — O(n)
+  const selected = filteredPool.slice(0, count)
+  for (let i = count; i < filteredPool.length; i++) {
+    const j = Math.floor(Math.random() * (i + 1))
+    if (j < count) selected[j] = filteredPool[i]
+  }
 
   searchResults.innerHTML = ''
   emptyState.style.display = 'none'
   document.getElementById('pagination').innerHTML = ''
 
-  const container = document.createElement('div')
-  container.className = 'hero-random-container'
-
-  const card = document.createElement('div')
-  card.className = 'app-card-grid-aesthetic hero-card'
-  card.innerHTML = `
-    <div class="card-icon-glossy" style="width:120px; height:120px; border-radius:24px;">
-        ${app.icon ? `<img src="${app.icon}" alt="${escapeHtml(app.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\\'fas fa-mobile-alt\\' style=\\'font-size:40px;\\'></i>'">` : '<i class="fas fa-mobile-alt" style="font-size:40px;"></i>'}
-    </div>
-    <div class="card-name-glossy" style="font-size:20px;">${renderAppTitle(app)}</div>
-    <div class="card-meta-glossy" style="font-size:14px; margin:10px 0;">
+  const container = document.createDocumentFragment()
+  selected.forEach(app => {
+    const card = document.createElement('div')
+    card.className = 'app-card-grid-aesthetic'
+    card.innerHTML = `
+      <div class="card-icon-glossy">
+        ${app.icon
+          ? `<img src="${app.icon}" alt="${escapeHtml(app.title)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\\'fas fa-mobile-alt\\'></i>'">`
+          : '<i class="fas fa-mobile-alt"></i>'}
+      </div>
+      <div class="card-name-glossy">${renderAppTitle(app)}</div>
+      <div class="card-meta-glossy">
         <span class="meta-v">v${escapeHtml(app.version)}</span>
         <span class="meta-s">${(app.fsize / 1024).toFixed(1)} MB</span>
-    </div>
-    <div class="card-os-glossy" style="font-size:13px; margin-bottom:20px;">
-        iOS ${formatOS(app.min_os)}+
-        ${getPlatformIcons(app.platform)}
-    </div>
-    <button class="primary-btn" style="width:100%; border-radius:20px;" onclick="openModal('${app.pk}')">View App</button>
- `
-  container.appendChild(card)
+      </div>
+      <div class="card-os-glossy">iOS ${formatOS(app.minos)}+ ${getPlatformIcons(app.platform)}</div>
+      <button class="get-btn-glossy" onclick="openModal('${app.pk}')">Get</button>
+    `
+    container.appendChild(card)
+  })
+
   searchResults.appendChild(container)
 }
 
@@ -424,8 +434,8 @@ function renderVersionPage(bundleId, page = 0) {
   }
 }
 
-// Segmented Control Logic
-document.querySelectorAll('.segment').forEach(seg => {
+// Segmented Controls
+document.querySelectorAll('#deviceSegments > .segment').forEach(seg => {
   seg.addEventListener('click', function () {
     const parent = this.parentElement
     parent.querySelectorAll('.segment').forEach(s => s.classList.remove('active'))
@@ -437,13 +447,20 @@ document.querySelectorAll('.segment').forEach(seg => {
   })
 })
 
+document.querySelectorAll('#randomCountSegments .segment').forEach(seg => {
+  seg.addEventListener('click', function () {
+    document.querySelectorAll('#randomCountSegments .segment').forEach(s => s.classList.remove('active'))
+    this.classList.add('active')
+  })
+})
+
 // Unique Login
 uniqueCheck.addEventListener('change', function () {
   applyFilters()
 })
 
 function setActiveSegment(value) {
-  const segments = document.querySelectorAll('.segment')
+  const segments = document.querySelectorAll('#deviceSegments > .segment')
   segments.forEach(s => {
     if (s.dataset.value === value) {
       s.classList.add('active')

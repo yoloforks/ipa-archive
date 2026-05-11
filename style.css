@@ -341,6 +341,7 @@ header:after {
     position: absolute;
     top: 0; left: 0; right: 0; height: 50%;
     background: linear-gradient(rgba(255,255,255,0.3), transparent);
+    pointer-events: none;
 }
 
 .primary-btn:active {
@@ -650,13 +651,6 @@ header:after {
 }
 
 /* Hero Random Result */
-.hero-random-container {
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
-    animation: fadeIn 0.5s ease;
-}
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -664,6 +658,38 @@ header:after {
 
 .results-fade-in {
     animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.random-controls {
+    display: flex;
+    align-items: center;
+}
+
+.random-btn {
+    border-radius: 6px 0 0 6px;
+    border-right: none;
+}
+
+.random-count-select {
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0 6px 6px 0;
+    height: 34px;
+    padding: 0;
+}
+
+.random-count-select > select {
+    appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    height: 100%;
+    cursor: pointer;
+    color: white;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
 }
 
 /* Empty State */
