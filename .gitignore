@@ -1,2 +1,4 @@
 .DS_Store
 ipa_download/
+node_modules
+pnpm-lock.yaml

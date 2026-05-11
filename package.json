@@ -1,0 +1,12 @@
+{
+  "name": "ipa-archive",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.33.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "8.0.12"
+  }
+}

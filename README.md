@@ -1,8 +1,16 @@
-# The Grand IPA Archive
+# IPA Archive
 
-Forked from relikd, indexed even more app. 
+<img
+  src="https://github.com/yoloforks/ipa-archive/blob/main/favicon.svg"
+  alt="IPA Archive Logo"
+  align="right"
+  height="160"
+/>
 
-NO APPS ARE HOSTED ON THIS SITE. 
+Forked from [stuffed18](https://github.com/stuffed18/ipa-archive-updated), restored ui and improved ux.
+
+> [!WARNING]
+> No apps are hosted on this site.
 
 Hello, this project aims to provide a searchable and filterable index for .ipa files.
 None of the linked files are mine, nor am I involved in any capacity on the referenced projects.
@@ -12,7 +20,7 @@ The list of indexed collections can be found at [data/urls.json](data/urls.json)
 
 ## Using the webpage
 
-You can add the [IPA Archive](https://stuffed18.github.io/ipa-archive-updated/) webpage to your homescreen.
+You can add the [IPA Archive](https://yoloforks.github.io/ipa-archive/) webpage to your homescreen.
 Note however, that each time you click on the app icon, it will reload the whole database and clear your previous results.
 To prevent that, use Safari instead.
 Switching back to the already open webpage, will not trigger a reload.
