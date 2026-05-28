@@ -23,7 +23,7 @@ function plistPlugin() {
         const r = url.searchParams.get('r')
         const d = url.searchParams.get('d')
 
-        // ?r=<url> — проксирование ресурса
+        // ?r=<url> - proxy
         if (r) {
           try {
             const response = await fetch(r)
@@ -39,7 +39,7 @@ function plistPlugin() {
           return
         }
 
-        // ?d=<base64> - iTunes plist
+        // ?d=<base64> - plist
         if (d) {
           try {
             const X = JSON.parse(Buffer.from(d, 'base64').toString('utf-8'))
